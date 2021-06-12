@@ -5,7 +5,12 @@ import type {Circus, Config} from '@jest/types';
 import type {EnvironmentContext, JestEnvironment} from '@jest/environment';
 import AllureReporter from './allure-reporter';
 
-function extendAllureBaseEnvironment<TBase extends typeof JestEnvironment>(Base: TBase): TBase {
+
+type GConstructor<T = {}> = new (...args: any[]) => T;
+type AllureJestEnvironment = GConstructor<JestEnvironment>;
+
+
+function extendAllureBaseEnvironment<TBase extends GConstructor<JestEnvironment>>(Base: TBase): AllureJestEnvironment {
 	// @ts-expect-error (ts(2545)) Incorrect assumption about a mixin class: https://github.com/microsoft/TypeScript/issues/37142
 	return class AllureBaseEnvironment extends Base {
 		global: any;
